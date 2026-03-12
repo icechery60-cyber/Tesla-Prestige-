@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tesla Prestige — Vehicles, Membership & Investment</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Syncopate:wght@400;700&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0a0a0a;
+    --deep: #0f0f0f;
+    --carbon: #141414;
+    --steel: #1e1e1e;
+    --red: #e31c24;
+    --red-dim: #8c1217;
+    --silver: #c8c8c8;
+    --white: #f4f4f4;
+    --gold: #b8964e;
+    --gold-light: #d4af70;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed; width: 10px; height: 10px;
+    background: var(--red); border-radius: 50%;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+  }
+  .cursor-ring {
+    position: fixed; width: 36px; height: 36px;
+    border: 1px solid rgba(227,28,36,0.5); border-radius: 50%;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.18s ease, width 0.3s, height 0.3s;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 60px;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.95), transparent);
+  }
+  .nav-logo {
+    font-family: 'Syncopate', sans-serif;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 0.3em; color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--red); }
+  .nav-links { display: flex; gap: 40px; list-style: none; }
+  .nav-links a {
+    font-family: 'Jost', sans-serif; font-size: 11px; font-weight: 300;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--silver); text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    font-family: 'Syncopate', sans-serif; font-size: 10px;
+    letter-spacing: 0.15em; padding: 10px 24px;
+    border: 1px solid var(--red); color: var(--red);
+    background: transparent; text-decoration: none;
+    transition: all 0.3s;
+  }
+  .nav-cta:hover { background: var(--red); color: var(--white); }
+
+  /* HERO */
+  .hero {
+    position: relative; height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: flex-start;
+    padding: 0 60px;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 70% 50%, rgba(227,28,36,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 80%, rgba(184,150,78,0.05) 0%, transparent 50%),
+      linear-gradient(135deg, #0a0a0a 0%, #111 50%, #0d0d0d 100%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse at 60% 50%, black 30%, transparent 70%);
+  }
+  .hero-line {
+    position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+    width: 3px; height: 120px; background: var(--red);
+    animation: lineGrow 1.5s ease forwards;
+  }
+  @keyframes lineGrow { from { height: 0; opacity: 0; } to { height: 120px; opacity: 1; } }
+
+  .hero-eyebrow {
+    font-family: 'Syncopate', sans-serif;
+    font-size: 10px; letter-spacing: 0.4em;
+    color: var(--red); text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0; animation: fadeUp 0.8s 0.3s ease forwards;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(64px, 9vw, 130px);
+    font-weight: 300; line-height: 0.92;
+    color: var(--white);
+    opacity: 0; animation: fadeUp 0.9s 0.5s ease forwards;
+  }
+  .hero-title em {
+    font-style: italic; color: var(--silver);
+    display: block; padding-left: 60px;
+  }
+  .hero-title strong {
+    font-weight: 600; color: var(--red);
+    font-style: normal;
+  }
+  .hero-sub {
+    margin-top: 36px; max-width: 440px;
+    font-size: 13px; font-weight: 300; line-height: 1.9;
+    color: rgba(200,200,200,0.7);
+    opacity: 0; animation: fadeUp 1s 0.7s ease forwards;
+  }
+  .hero-actions {
+    margin-top: 52px; display: flex; gap: 20px; align-items: center;
+    opacity: 0; animation: fadeUp 1s 0.9s ease forwards;
+  }
+  .btn-primary {
+    font-family: 'Syncopate', sans-serif; font-size: 10px;
+    letter-spacing: 0.2em; padding: 16px 40px;
+    background: var(--red); color: var(--white);
+    border: none; text-decoration: none;
+    transition: all 0.3s; display: inline-block;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+  .btn-primary:hover { background: #ff2530; transform: translateY(-2px); }
+  .btn-ghost {
+    font-family: 'Jost', sans-serif; font-size: 12px;
+    letter-spacing: 0.15em; color: var(--silver);
+    text-decoration: none; display: flex; align-items: center; gap: 10px;
+    transition: color 0.3s;
+  }
+  .btn-ghost::after {
+    content: '→'; font-size: 16px; transition: transform 0.3s;
+  }
+  .btn-ghost:hover { color: var(--white); }
+  .btn-ghost:hover::after { transform: translateX(6px); }
+
+  .hero-scroll {
+    position: absolute; bottom: 40px; left: 60px;
+    display: flex; align-items: center; gap: 14px;
+    font-family: 'Syncopate', sans-serif; font-size: 9px;
+    letter-spacing: 0.3em; color: rgba(200,200,200,0.4);
+  }
+  .hero-scroll-line {
+    width: 60px; height: 1px; background: rgba(200,200,200,0.2);
+    position: relative; overflow: hidden;
+  }
+  .hero-scroll-line::after {
+    content: ''; position: absolute; top: 0; left: -100%;
+    width: 100%; height: 100%; background: var(--red);
+    animation: scrollLine 2s infinite;
+  }
+  @keyframes scrollLine { to { left: 100%; } }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* STATS */
+  .stats-bar {
+    background: var(--carbon);
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: grid; grid-template-columns: repeat(4, 1fr);
+  }
+  .stat {
+    padding: 48px 40px; text-align: center;
+    border-right: 1px solid rgba(255,255,255,0.05);
+    position: relative; overflow: hidden;
+  }
+  .stat:last-child { border-right: none; }
+  .stat::before {
+    content: ''; position: absolute;
+    bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 0; height: 2px; background: var(--red);
+    transition: width 0.4s;
+  }
+  .stat:hover::before { width: 60%; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px; font-weight: 300; color: var(--white);
+    line-height: 1;
+  }
+  .stat-num span { color: var(--red); font-size: 32px; }
+  .stat-label {
+    margin-top: 8px; font-size: 10px; letter-spacing: 0.25em;
+    text-transform: uppercase; color: rgba(200,200,200,0.5);
+  }
+
+  /* SECTION HEADER */
+  .section-header {
+    text-align: center; padding: 120px 60px 80px;
+  }
+  .section-tag {
+    font-family: 'Syncopate', sans-serif; font-size: 9px;
+    letter-spacing: 0.5em; text-transform: uppercase;
+    color: var(--red); display: block; margin-bottom: 20px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(40px, 5vw, 72px); font-weight: 300;
+    line-height: 1.1; color: var(--white);
+  }
+  .section-title em { font-style: italic; color: var(--silver); }
+  .section-divider {
+    width: 60px; height: 1px; background: var(--red);
+    margin: 32px auto 0;
+  }
+
+  /* OFFERINGS */
+  .offerings {
+    padding: 0 60px 120px;
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 2px; background: rgba(255,255,255,0.03);
+  }
+  .offering {
+    background: var(--deep);
+    padding: 72px 56px; position: relative;
+    overflow: hidden; transition: background 0.4s;
+  }
+  .offering::before {
+    content: attr(data-number);
+    position: absolute; top: 30px; right: 40px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 100px; font-weight: 300;
+    color: rgba(255,255,255,0.03);
+    line-height: 1; transition: color 0.4s;
+  }
+  .offering:hover { background: var(--carbon); }
+  .offering:hover::before { color: rgba(227,28,36,0.06); }
+  .offering-icon {
+    width: 48px; height: 48px; margin-bottom: 32px;
+    border: 1px solid rgba(227,28,36,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  }
+  .offering-tag {
+    font-family: 'Syncopate', sans-serif; font-size: 9px;
+    letter-spacing: 0.4em; color: var(--red);
+    margin-bottom: 16px; display: block;
+  }
+  .offering-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px; font-weight: 300; color: var(--white);
+    line-height: 1.1; margin-bottom: 20px;
+  }
+  .offering-desc {
+    font-size: 13px; line-height: 1.9; color: rgba(200,200,200,0.6);
+    margin-bottom: 36px;
+  }
+  .offering-features { list-style: none; margin-bottom: 40px; }
+  .offering-features li {
+    font-size: 12px; letter-spacing: 0.05em;
+    color: rgba(200,200,200,0.5); padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .offering-features li::before {
+    content: ''; width: 20px; height: 1px; background: var(--red); flex-shrink: 0;
+  }
+  .offering-link {
+    font-family: 'Syncopate', sans-serif; font-size: 9px;
+    letter-spacing: 0.25em; color: var(--red);
+    text-decoration: none; display: flex; align-items: center; gap: 10px;
+    transition: gap 0.3s;
+  }
+  .offering-link::after { content: '→'; font-size: 14px; }
+  .offering-link:hover { gap: 18px; }
+
+  /* VIP CARD */
+  .vip-section {
+    padding: 0 60px 120px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+  }
+  .vip-card {
+    position: relative; aspect-ratio: 1.586/1;
+    background: linear-gradient(135deg, #1a1a1a, #0d0d0d);
+    border: 1px solid rgba(184,150,78,0.2);
+    border-radius: 16px; padding: 40px;
+    overflow: hidden;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.6), inset 0 1px 0 rgba(184,150,78,0.1);
+  }
+  .vip-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(184,150,78,0.08) 0%, transparent 50%, rgba(227,28,36,0.05) 100%);
+  }
+  .vip-card-logo {
+    font-family: 'Syncopate', sans-serif; font-size: 14px;
+    font-weight: 700; letter-spacing: 0.3em;
+    color: var(--gold-light); margin-bottom: auto;
+  }
+  .vip-card-logo span { color: var(--red); }
+  .vip-card-body {
+    position: absolute; bottom: 40px; left: 40px; right: 40px;
+  }
+  .vip-card-tier {
+    font-family: 'Syncopate', sans-serif; font-size: 8px;
+    letter-spacing: 0.5em; color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .vip-card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px; font-weight: 300; color: var(--white);
+  }
+  .vip-card-chip {
+    position: absolute; right: 40px; top: 50%;
+    transform: translateY(-50%);
+    width: 44px; height: 34px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-radius: 4px; opacity: 0.7;
+  }
+  .vip-card-lines {
+    position: absolute; top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border: 1px solid rgba(184,150,78,0.1);
+    border-radius: 50%;
+  }
+  .vip-card-lines::after {
+    content: ''; position: absolute; inset: 20px;
+    border: 1px solid rgba(184,150,78,0.07);
+    border-radius: 50%;
+  }
+
+  .vip-content { }
+  .vip-content .section-tag { text-align: left; }
+  .vip-content .section-title { text-align: left; font-size: 48px; }
+  .vip-content .section-divider { margin: 24px 0 0; }
+  .vip-desc {
+    margin-top: 24px; font-size: 13px; line-height: 1.9;
+    color: rgba(200,200,200,0.6); max-width: 400px;
+  }
+  .vip-perks {
+    margin-top: 36px; display: grid;
+    grid-template-columns: 1fr 1fr; gap: 16px;
+  }
+  .vip-perk {
+    padding: 20px; background: var(--carbon);
+    border: 1px solid rgba(184,150,78,0.1);
+    border-left: 2px solid var(--gold);
+  }
+  .vip-perk-title {
+    font-family: 'Syncopate', sans-serif; font-size: 9px;
+    letter-spacing: 0.2em; color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .vip-perk-desc {
+    font-size: 11px; color: rgba(200,200,200,0.5); line-height: 1.6;
+  }
+
+  /* INVESTMENT */
+  .investment-section {
+    background: var(--carbon);
+    border-top: 1px solid rgba(255,255,255,0.04);
+    padding: 120px 60px;
+  }
+  .invest-grid {
+    display: grid; grid-template-columns: 1fr 1.2fr;
+    gap: 100px; align-items: start; margin-top: 80px;
+  }
+  .invest-visual {
+    position: relative;
+  }
+  .invest-chart {
+    width: 100%; aspect-ratio: 1;
+    border: 1px solid rgba(255,255,255,0.05);
+    background: var(--deep);
+    padding: 40px; position: relative; overflow: hidden;
+  }
+  .invest-chart-label {
+    font-family: 'Syncopate', sans-serif; font-size: 8px;
+    letter-spacing: 0.3em; color: rgba(200,200,200,0.3);
+    margin-bottom: 60px;
+  }
+  .invest-chart-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 64px; font-weight: 300; color: var(--white);
+  }
+  .invest-chart-value span { font-size: 36px; color: var(--red); }
+  .invest-chart-sub {
+    font-size: 11px; letter-spacing: 0.1em;
+    color: rgba(200,200,200,0.4); margin-top: 6px;
+  }
+  .invest-bar-container { margin-top: 40px; }
+  .invest-bar-row {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 14px;
+  }
+  .invest-bar-label {
+    font-size: 10px; letter-spacing: 0.1em;
+    color: rgba(200,200,200,0.5); width: 60px; text-align: right;
+    flex-shrink: 0;
+  }
+  .invest-bar-track {
+    flex: 1; height: 2px; background: rgba(255,255,255,0.06);
+    position: relative; overflow: hidden;
+  }
+  .invest-bar-fill {
+    height: 100%; background: linear-gradient(90deg, var(--red-dim), var(--red));
+    animation: barFill 2s ease forwards;
+    transform-origin: left;
+  }
+  @keyframes barFill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  .invest-bar-val {
+    font-family: 'Syncopate', sans-serif; font-size: 9px;
+    color: var(--red); width: 30px; flex-shrink: 0;
+  }
+
+  .invest-content .section-tag { text-align: left; }
+  .invest-content .section-title { text-align: left; font-size: 48px; }
+  .invest-content .section-divider { margin: 24px 0 36px; }
+  .invest-desc {
+    font-size: 13px; line-height: 1.9;
+    color: rgba(200,200,200,0.6);
+  }
+  .invest-tiers { margin-top: 40px; }
+  .invest-tier {
+    padding: 28px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .invest-tier:first-child { border-top: 1px solid rgba(255,255,255,0.05); }
+  .invest-tier-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 300; color: var(--white);
+  }
+  .invest-tier-badge {
+    font-family: 'Syncopate', sans-serif; font-size: 8px;
+    letter-spacing: 0.2em; padding: 6px 14px;
+    border: 1px solid; margin-left: 12px;
+  }
+  .invest-tier-badge.entry { border-color: rgba(200,200,200,0.2); color: rgba(200,200,200,0.4); }
+  .invest-tier-badge.elite { border-color: rgba(184,150,78,0.4); color: var(--gold); }
+  .invest-tier-badge.prestige { border-color: rgba(227,28,36,0.4); color: var(--red); }
+  .invest-tier-amount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 300; color: var(--white);
+    text-align: right;
+  }
+  .invest-tier-amount small {
+    display: block; font-size: 11px; font-family: 'Jost', sans-serif;
+    font-weight: 300; color: rgba(200,200,200,0.4); letter-spacing: 0.1em;
+  }
+
+  /* MEET & GREET */
+  .meetgreet-section {
+    padding: 120px 60px;
+    position: relative; overflow: hidden;
+  }
+  .meetgreet-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 80% 50%, rgba(227,28,36,0.06) 0%, transparent 60%);
+  }
+  .meetgreet-inner {
+    position: relative; z-index: 1;
+    display: grid; grid-template-columns: 1.2fr 1fr;
+    gap: 100px; align-items: center; margin-top: 80px;
+  }
+  .meetgreet-desc {
+    font-size: 13px; line-height: 1.9;
+    color: rgba(200,200,200,0.6); margin-bottom: 40px;
+  }
+  .meetgreet-events { }
+  .meetgreet-event {
+    display: flex; gap: 24px; padding: 24px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    align-items: flex-start;
+  }
+  .meetgreet-date {
+    flex-shrink: 0; width: 56px; text-align: center;
+    padding: 12px 8px;
+    border: 1px solid rgba(227,28,36,0.2);
+  }
+  .meetgreet-date-day {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 300; color: var(--red);
+    line-height: 1;
+  }
+  .meetgreet-date-month {
+    font-family: 'Syncopate', sans-serif; font-size: 8px;
+    letter-spacing: 0.2em; color: rgba(200,200,200,0.4);
+    margin-top: 4px;
+  }
+  .meetgreet-event-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 300; color: var(--white);
+    margin-bottom: 6px;
+  }
+  .meetgreet-event-loc {
+    font-size: 11px; letter-spacing: 0.1em;
+    color: rgba(200,200,200,0.4);
+  }
+  .meetgreet-event-spots {
+    margin-left: auto; flex-shrink: 0;
+    font-family: 'Syncopate', sans-serif; font-size: 8px;
+    letter-spacing: 0.2em; color: var(--gold);
+    padding: 6px 12px; border: 1px solid rgba(184,150,78,0.2);
+    align-self: center;
+  }
+
+  .meetgreet-visual {
+    position: relative;
+  }
+  .meetgreet-box {
+    background: var(--carbon);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 60px 50px; position: relative;
+    overflow: hidden;
+  }
+  .meetgreet-box::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--red), transparent);
+  }
+  .meetgreet-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-style: italic; font-weight: 300;
+    color: var(--white); line-height: 1.4; margin-bottom: 28px;
+  }
+  .meetgreet-quote-attr {
+    font-family: 'Syncopate', sans-serif; font-size: 8px;
+    letter-spacing: 0.3em; color: rgba(200,200,200,0.4);
+  }
+  .meetgreet-box-deco {
+    position: absolute; bottom: -30px; right: -30px;
+    width: 120px; height: 120px;
+    border: 1px solid rgba(227,28,36,0.1);
+    border-radius: 50%;
+  }
+
+  /* CTA */
+  .cta-section {
+    background: var(--carbon);
+    border-top: 1px solid rgba(255,255,255,0.04);
+    padding: 120px 60px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: 'TESLA'; position: absolute;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 300px; font-weight: 300;
+    color: rgba(255,255,255,0.015);
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    white-space: nowrap; pointer-events: none;
+  }
+  .cta-section .section-title { font-size: clamp(40px, 5vw, 68px); }
+  .cta-section .section-divider { margin: 32px auto 40px; }
+  .cta-sub {
+    font-size: 13px; line-height: 1.9;
+    color: rgba(200,200,200,0.5); max-width: 500px; margin: 0 auto 52px;
+  }
+  .cta-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+  .btn-large {
+    font-family: 'Syncopate', sans-serif; font-size: 11px;
+    letter-spacing: 0.2em; padding: 20px 52px;
+    background: var(--red); color: var(--white);
+    border: none; text-decoration: none;
+    transition: all 0.3s; display: inline-block;
+    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+  }
+  .btn-large:hover { background: #ff2530; transform: translateY(-3px); }
+  .btn-large-ghost {
+    font-family: 'Syncopate', sans-serif; font-size: 11px;
+    letter-spacing: 0.2em; padding: 20px 52px;
+    background: transparent; color: var(--white);
+    border: 1px solid rgba(255,255,255,0.2);
+    text-decoration: none; display: inline-block;
+    transition: all 0.3s;
+  }
+  .btn-large-ghost:hover { border-color: var(--white); transform: translateY(-3px); }
+
+  /* FOOTER */
+  footer {
+    padding: 60px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-logo {
+    font-family: 'Syncopate', sans-serif; font-size: 13px;
+    font-weight: 700; letter-spacing: 0.3em; color: var(--white);
+  }
+  .footer-logo span { color: var(--red); }
+  .footer-links { display: flex; gap: 32px; }
+  .footer-links a {
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(200,200,200,0.3); text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--white); }
+  .footer-copy {
+    font-size: 10px; letter-spacing: 0.1em;
+    color: rgba(200,200,200,0.2);
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 0 24px; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .offerings { grid-template-columns: 1fr; padding: 0 24px 80px; }
+    .vip-section, .invest-grid, .meetgreet-inner { grid-template-columns: 1fr; gap: 60px; padding: 0 24px; }
+    .vip-section { padding: 0 24px 80px; }
+    .investment-section, .meetgreet-section, .cta-section { padding: 80px 24px; }
+    footer { flex-direction: column; gap: 24px; padding: 40px 24px; text-align: center; }
+    .footer-links { flex-wrap: wrap; justify-content: center; }
+    .section-header { padding: 80px 24px 60px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="#" class="nav-logo">TESLA<span>·</span>PRESTIGE</a>
+  <ul class="nav-links">
+    <li><a href="#offerings">Vehicles</a></li>
+    <li><a href="#vip">VIP Card</a></li>
+    <li><a href="#invest">Invest</a></li>
+    <li><a href="#events">Events</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get Access</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-line"></div>
+
+  <p class="hero-eyebrow">The Future of Luxury Mobility</p>
+  <h1 class="hero-title">
+    Drive.<br>
+    <em>Invest.</em>
+    <strong>Live</strong> Tesla.
+  </h1>
+  <p class="hero-sub">
+    The world's most exclusive Tesla experience — from premium vehicle acquisition to VIP membership, private events, and strategic investment opportunities.
+  </p>
+  <div class="hero-actions">
+    <a href="#offerings" class="btn-primary">Explore Offerings</a>
+    <a href="#vip" class="btn-ghost">VIP Membership</a>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    Scroll to discover
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-num">12<span>+</span></div>
+    <div class="stat-label">Tesla Models Available</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">500<span>+</span></div>
+    <div class="stat-label">VIP Members Worldwide</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">48<span>h</span></div>
+    <div class="stat-label">Delivery Turnaround</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">94<span>%</span></div>
+    <div class="stat-label">Investment Return Rate</div>
+  </div>
+</div>
+
+<!-- VEHICLES PRICING -->
+<section id="offerings">
+  <div class="section-header">
+    <span class="section-tag">Our Fleet</span>
+    <h2 class="section-title">Tesla <em>Vehicles</em><br>& Pricing</h2>
+    <div class="section-divider"></div>
+    <p style="margin-top:24px;font-size:13px;color:rgba(200,200,200,0.5);max-width:560px;margin-left:auto;margin-right:auto;line-height:1.9;">
+      ⚠️ All transactions require an active <strong style="color:var(--gold)">VIP Prestige Card</strong> before any purchase can proceed. VIP Card must be obtained first — <a href="#vip" style="color:var(--red);text-decoration:none;">see below.</a>
+    </p>
+  </div>
+
+  <!-- Vehicle Cards -->
+  <div style="padding:0 60px 60px; display:grid; grid-template-columns:repeat(3,1fr); gap:2px; background:rgba(255,255,255,0.03);">
+
+    <div class="offering" data-number="01" style="grid-column:span 1;">
+      <div class="offering-icon">⚡</div>
+      <span class="offering-tag">Sedan</span>
+      <h3 class="offering-title">Model 3</h3>
+      <p class="offering-desc">Precision performance meets everyday efficiency. The world's best-selling electric sedan, reimagined.</p>
+      <div style="margin:24px 0 16px; padding:20px; background:var(--steel); border-left:2px solid var(--red);">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;color:var(--white);">$29,500</div>
+        <div style="font-size:10px;letter-spacing:0.15em;color:rgba(200,200,200,0.4);margin-top:4px;">+ $1,300 delivery on arrival</div>
+      </div>
+      <a href="#payment" class="offering-link">Order Now</a>
+    </div>
+
+    <div class="offering" data-number="02">
+      <div class="offering-icon">🚗</div>
+      <span class="offering-tag">SUV</span>
+      <h3 class="offering-title">Model Y</h3>
+      <p class="offering-desc">The most versatile Tesla. Spacious, fast, and built for every adventure.</p>
+      <div style="margin:24px 0 16px; padding:20px; background:var(--steel); border-left:2px solid var(--red);">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;color:var(--white);">$41,000</div>
+        <div style="font-size:10px;letter-spacing:0.15em;color:rgba(200,200,200,0.4);margin-top:4px;">+ $1,300 delivery on arrival</div>
+      </div>
+      <a href="#payment" class="offering-link">Order Now</a>
+    </div>
+
+    <div class="offering" data-number="03">
+      <div class="offering-icon">🏎️</div>
+      <span class="offering-tag">Luxury Sedan</span>
+      <h3 class="offering-title">Model S</h3>
+      <p class="offering-desc">The pinnacle of electric luxury. Plaid performance. Breathtaking range. Unmistakable presence.</p>
+      <div style="margin:24px 0 16px; padding:20px; background:var(--steel); border-left:2px solid var(--gold);">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;color:var(--white);">$75,450</div>
+        <div style="font-size:10px;letter-spacing:0.15em;color:rgba(200,200,200,0.4);margin-top:4px;">+ $1,300 delivery on arrival</div>
+      </div>
+      <a href="#payment" class="offering-link">Order Now</a>
+    </div>
+
+    <div class="offering" data-number="04">
+      <div class="offering-icon">🦅</div>
+      <span class="offering-tag">Luxury SUV</span>
+      <h3 class="offering-title">Model X</h3>
+      <p class="offering-desc">Falcon-wing doors. Seven-seat luxury. Unrivalled power. The ultimate family supercar.</p>
+      <div style="margin:24px 0 16px; padding:20px; background:var(--steel); border-left:2px solid var(--gold);">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;color:var(--white);">$87,340</div>
+        <div style="font-size:10px;letter-spacing:0.15em;color:rgba(200,200,200,0.4);margin-top:4px;">+ $1,300 delivery on arrival</div>
+      </div>
+      <a href="#payment" class="offering-link">Order Now</a>
+    </div>
+
+    <div class="offering" data-number="05" style="grid-column:span 2; display:flex; gap:40px; align-items:center;">
+      <div style="flex:1;">
+        <div class="offering-icon">🤖</div>
+        <span class="offering-tag">Truck · Most Wanted</span>
+        <h3 class="offering-title">Cybertruck</h3>
+        <p class="offering-desc">The future of trucks has arrived. Bulletproof stainless steel exoskeleton. Insane towing. Zero compromise.</p>
+        <div style="margin:24px 0 16px; padding:20px; background:var(--steel); border-left:2px solid var(--red); display:inline-block; min-width:260px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:var(--white);">$58,700</div>
+          <div style="font-size:10px;letter-spacing:0.15em;color:rgba(200,200,200,0.4);margin-top:4px;">+ $1,300 delivery on arrival</div>
+        </div>
+        <br><a href="#payment" class="offering-link">Order Now</a>
+      </div>
+      <div style="flex:1; padding:40px; background:rgba(227,28,36,0.04); border:1px solid rgba(227,28,36,0.1); text-align:center;">
+        <div style="font-size:60px; margin-bottom:16px;">🔒</div>
+        <div style="font-family:'Syncopate',sans-serif;font-size:9px;letter-spacing:0.3em;color:var(--red);margin-bottom:12px;">IMPORTANT NOTICE</div>
+        <p style="font-size:12px;line-height:1.9;color:rgba(200,200,200,0.6);">To place any vehicle order, you must first hold a valid <strong style="color:var(--gold)">VIP Prestige Card ($2,500)</strong>. No vehicle transaction will be processed without active membership.</p>
+        <a href="#vip" style="display:inline-block;margin-top:20px;font-family:'Syncopate',sans-serif;font-size:9px;letter-spacing:0.2em;padding:12px 28px;border:1px solid var(--gold);color:var(--gold);text-decoration:none;transition:all 0.3s;" onmouseover="this.style.background='rgba(184,150,78,0.1)'" onmouseout="this.style.background='transparent'">Get VIP Card First →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- VIP CARD -->
+<section id="vip">
+  <div class="section-header">
+    <span class="section-tag">VIP Membership</span>
+    <h2 class="section-title">The <em>Prestige</em><br>Fan Card</h2>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="vip-section">
+    <div class="vip-card">
+      <div class="vip-card-lines"></div>
+      <div class="vip-card-logo">TESLA<span>·</span>PRESTIGE</div>
+      <div class="vip-card-chip"></div>
+      <div class="vip-card-body">
+        <div class="vip-card-tier">PLATINUM MEMBER</div>
+        <div class="vip-card-name">Your Name Here</div>
+      </div>
+    </div>
+
+    <div class="vip-content">
+      <span class="section-tag">Exclusive Access · Required First Step</span>
+      <h2 class="section-title">More Than<br><em>a Card.</em></h2>
+      <div class="section-divider"></div>
+      <p class="vip-desc">The Tesla Prestige Fan Card is your gateway to all services. <strong style="color:var(--red)">No vehicle purchase, investment, or transaction of any kind can be processed without an active VIP Card.</strong> It is your first and most important step.</p>
+      <div style="margin-top:28px;padding:24px 28px;background:var(--carbon);border:1px solid rgba(184,150,78,0.3);border-left:3px solid var(--gold);display:flex;align-items:center;justify-content:space-between;gap:20px;">
+        <div>
+          <div style="font-family:'Syncopate',sans-serif;font-size:9px;letter-spacing:0.3em;color:var(--gold);margin-bottom:8px;">VIP PRESTIGE CARD</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:var(--white);line-height:1;">$2,500</div>
+          <div style="font-size:11px;color:rgba(200,200,200,0.4);margin-top:4px;letter-spacing:0.1em;">One-time membership fee</div>
+        </div>
+        <a href="#payment" style="font-family:'Syncopate',sans-serif;font-size:9px;letter-spacing:0.2em;padding:16px 28px;background:var(--gold);color:var(--black);text-decoration:none;white-space:nowrap;transition:all 0.3s;flex-shrink:0;" onmouseover="this.style.background='var(--gold-light)'" onmouseout="this.style.background='var(--gold)'">Get Card Now →</a>
+      </div>
+      <div class="vip-perks">
+        <div class="vip-perk">
+          <div class="vip-perk-title">Priority Access</div>
+          <div class="vip-perk-desc">First in line for new model allocations & waitlists</div>
+        </div>
+        <div class="vip-perk">
+          <div class="vip-perk-title">Concierge 24/7</div>
+          <div class="vip-perk-desc">Dedicated Tesla lifestyle team at your disposal</div>
+        </div>
+        <div class="vip-perk">
+          <div class="vip-perk-title">Exclusive Merch</div>
+          <div class="vip-perk-desc">Limited edition Tesla Prestige collectibles</div>
+        </div>
+        <div class="vip-perk">
+          <div class="vip-perk-title">Factory Tours</div>
+          <div class="vip-perk-desc">Behind-the-scenes Gigafactory access</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INVESTMENT -->
+<section id="invest" class="investment-section">
+  <div class="section-header" style="padding-top:0;">
+    <span class="section-tag">Tesla Investment</span>
+    <h2 class="section-title">Grow with the<br><em>Electric Revolution</em></h2>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="invest-grid">
+    <div class="invest-visual">
+      <div class="invest-chart">
+        <div class="invest-chart-label">PORTFOLIO PERFORMANCE</div>
+        <div class="invest-chart-value"><span>+</span>312%</div>
+        <div class="invest-chart-sub">5-year member avg. return</div>
+        <div class="invest-bar-container">
+          <div class="invest-bar-row">
+            <div class="invest-bar-label">TSLA</div>
+            <div class="invest-bar-track"><div class="invest-bar-fill" style="width:88%"></div></div>
+            <div class="invest-bar-val">88%</div>
+          </div>
+          <div class="invest-bar-row">
+            <div class="invest-bar-label">Energy</div>
+            <div class="invest-bar-track"><div class="invest-bar-fill" style="width:72%;animation-delay:0.2s"></div></div>
+            <div class="invest-bar-val">72%</div>
+          </div>
+          <div class="invest-bar-row">
+            <div class="invest-bar-label">Infra</div>
+            <div class="invest-bar-track"><div class="invest-bar-fill" style="width:61%;animation-delay:0.4s"></div></div>
+            <div class="invest-bar-val">61%</div>
+          </div>
+          <div class="invest-bar-row">
+            <div class="invest-bar-label">Solar</div>
+            <div class="invest-bar-track"><div class="invest-bar-fill" style="width:54%;animation-delay:0.6s"></div></div>
+            <div class="invest-bar-val">54%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="invest-content">
+      <span class="section-tag">Strategic Investment</span>
+      <h2 class="section-title">Three Tiers.<br><em>One Mission.</em></h2>
+      <div class="section-divider"></div>
+      <p class="invest-desc">Whether you're beginning your Tesla investment journey or scaling a sophisticated EV portfolio, our expert team structures the right approach for your goals and risk profile.</p>
+      <div class="invest-tiers">
+        <div class="invest-tier">
+          <div>
+            <div class="invest-tier-name">Entry <span class="invest-tier-badge entry">STARTER</span></div>
+          </div>
+          <div class="invest-tier-amount">$5,000 <small>minimum</small></div>
+        </div>
+        <div class="invest-tier">
+          <div>
+            <div class="invest-tier-name">Elite <span class="invest-tier-badge elite">GOLD</span></div>
+          </div>
+          <div class="invest-tier-amount">$25,000 <small>minimum</small></div>
+        </div>
+        <div class="invest-tier">
+          <div>
+            <div class="invest-tier-name">Prestige <span class="invest-tier-badge prestige">PLATINUM</span></div>
+          </div>
+          <div class="invest-tier-amount">$100,000 <small>minimum</small></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEET & GREET -->
+<section id="events" class="meetgreet-section">
+  <div class="meetgreet-bg"></div>
+  <div class="section-header" style="padding-top:0; position:relative; z-index:1;">
+    <span class="section-tag">Events</span>
+    <h2 class="section-title">Meet & <em>Greet</em><br>Experiences</h2>
+    <div class="section-divider"></div>
+  </div>
+
+  <div class="meetgreet-inner">
+    <div>
+      <p class="meetgreet-desc">Step inside the world of Tesla like never before. Our curated events bring together owners, enthusiasts, investors, and insiders for experiences that go far beyond the showroom floor.</p>
+
+      <div style="margin-bottom:32px;padding:20px 24px;background:var(--carbon);border:1px solid rgba(227,28,36,0.2);border-left:3px solid var(--red);display:flex;align-items:center;gap:20px;">
+        <div style="font-size:28px;">💬</div>
+        <div>
+          <div style="font-family:'Syncopate',sans-serif;font-size:9px;letter-spacing:0.3em;color:var(--red);margin-bottom:6px;">MEET & GREET BOOKINGS</div>
+          <div style="font-size:13px;color:rgba(200,200,200,0.8);line-height:1.7;">Message management directly on <strong style="color:var(--white)">Zangi</strong> to book your event spot.</div>
+          <div style="margin-top:8px;font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--white);letter-spacing:0.05em;">📱 8115617418</div>
+        </div>
+      </div>
+      <div class="meetgreet-events">
+        <div class="meetgreet-event">
+          <div class="meetgreet-date">
+            <div class="meetgreet-date-day">14</div>
+            <div class="meetgreet-date-month">APR</div>
+          </div>
+          <div>
+            <div class="meetgreet-event-title">Cybertruck Owners Summit</div>
+            <div class="meetgreet-event-loc">📍 Austin, Texas — Gigafactory</div>
+          </div>
+          <div class="meetgreet-event-spots">8 spots left</div>
+        </div>
+        <div class="meetgreet-event">
+          <div class="meetgreet-date">
+            <div class="meetgreet-date-day">02</div>
+            <div class="meetgreet-date-month">MAY</div>
+          </div>
+          <div>
+            <div class="meetgreet-event-title">Plaid Track Day Experience</div>
+            <div class="meetgreet-event-loc">📍 Laguna Seca, California</div>
+          </div>
+          <div class="meetgreet-event-spots">12 spots</div>
+        </div>
+        <div class="meetgreet-event">
+          <div class="meetgreet-date">
+            <div class="meetgreet-date-day">19</div>
+            <div class="meetgreet-date-month">JUN</div>
+          </div>
+          <div>
+            <div class="meetgreet-event-title">VIP Investor Gala & Forum</div>
+            <div class="meetgreet-event-loc">📍 Beverly Hills, California</div>
+          </div>
+          <div class="meetgreet-event-spots">Invite only</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="meetgreet-visual">
+      <div class="meetgreet-box">
+        <p class="meetgreet-quote">"The most exhilarating 48 hours of my year — every year."</p>
+        <div class="meetgreet-quote-attr">— PLATINUM MEMBER SINCE 2021</div>
+        <div class="meetgreet-box-deco"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAYMENT SECTION -->
+<section id="payment" style="background:var(--carbon);border-top:1px solid rgba(255,255,255,0.04);padding:120px 60px;">
+  <div class="section-header" style="padding-top:0;">
+    <span class="section-tag">Secure Payment</span>
+    <h2 class="section-title">Pay with <em>Bitcoin</em></h2>
+    <div class="section-divider"></div>
+    <p style="margin-top:24px;font-size:13px;color:rgba(200,200,200,0.5);max-width:540px;margin-left:auto;margin-right:auto;line-height:1.9;">All payments are processed exclusively via Bitcoin through the Exodus Wallet application. Fast, secure, and borderless.</p>
+  </div>
+
+  <div style="max-width:820px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start;">
+    <!-- Wallet Info -->
+    <div style="background:var(--deep);border:1px solid rgba(247,147,26,0.15);padding:48px 40px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#f7931a,transparent);"></div>
+      <div style="font-size:40px;margin-bottom:20px;">₿</div>
+      <div style="font-family:'Syncopate',sans-serif;font-size:9px;letter-spacing:0.4em;color:rgba(247,147,26,0.8);margin-bottom:16px;">BITCOIN WALLET ADDRESS</div>
+      <div style="font-size:12px;color:var(--white);background:rgba(255,255,255,0.04);padding:16px;border:1px solid rgba(255,255,255,0.08);word-break:break-all;letter-spacing:0.05em;line-height:1.8;user-select:all;">bc1qkp8xek6rg09xtecqty9fe9995ypa24hs935t0j</div>
+      <button onclick="navigator.clipboard.writeText('bc1qkp8xek6rg09xtecqty9fe9995ypa24hs935t0j');this.textContent='✓ Copied!';setTimeout(()=>this.textContent='Copy Address',2000)" style="margin-top:16px;width:100%;font-family:'Syncopate',sans-serif;font-size:9px;letter-spacing:0.25em;padding:14px;background:rgba(247,147,26,0.1);border:1px solid rgba(247,147,26,0.3);color:rgba(247,147,26,0.9);cursor:pointer;transition:all 0.3s;" onmouseover="this.style.background='rgba(247,147,26,0.2)'" onmouseout="this.style.background='rgba(247,147,26,0.1)'">Copy Address</button>
+      <div style="margin-top:24px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.05);">
+        <div style="font-family:'Syncopate',sans-serif;font-size:8px;letter-spacing:0.3em;color:rgba(200,200,200,0.3);margin-bottom:10px;">WALLET APPLICATION</div>
+        <div style="font-size:15px;color:var(--white);display:flex;align-items:center;gap:10px;">🌐 Exodus Wallet</div>
+      </div>
+    </div>
+
+    <!-- Steps -->
+    <div>
+      <div style="font-family:'Syncopate',sans-serif;font-size:9px;letter-spacing:0.4em;color:var(--red);margin-bottom:28px;">HOW TO ORDER</div>
+      <div style="display:flex;flex-direction:column;">
+        <div style="display:flex;gap:20px;padding-bottom:28px;border-left:1px solid rgba(227,28,36,0.2);padding-left:24px;position:relative;">
+          <div style="position:absolute;left:-8px;top:0;width:16px;height:16px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:white;font-family:'Syncopate',sans-serif;">1</div>
+          <div><div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--white);margin-bottom:6px;">Get Your VIP Card First</div><div style="font-size:12px;color:rgba(200,200,200,0.5);line-height:1.7;">Send $2,500 in BTC to the wallet address. <strong style="color:var(--gold)">Mandatory before any other transaction.</strong></div></div>
+        </div>
+        <div style="display:flex;gap:20px;padding-bottom:28px;border-left:1px solid rgba(227,28,36,0.2);padding-left:24px;position:relative;">
+          <div style="position:absolute;left:-8px;top:0;width:16px;height:16px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:white;font-family:'Syncopate',sans-serif;">2</div>
+          <div><div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--white);margin-bottom:6px;">Choose Your Tesla</div><div style="font-size:12px;color:rgba(200,200,200,0.5);line-height:1.7;">Select your model and send the price in BTC to the same wallet address.</div></div>
+        </div>
+        <div style="display:flex;gap:20px;padding-bottom:28px;border-left:1px solid rgba(227,28,36,0.2);padding-left:24px;position:relative;">
+          <div style="position:absolute;left:-8px;top:0;width:16px;height:16px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:white;font-family:'Syncopate',sans-serif;">3</div>
+          <div><div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--white);margin-bottom:6px;">Confirm Payment</div><div style="font-size:12px;color:rgba(200,200,200,0.5);line-height:1.7;">Send proof of your BTC transaction to management for verification and dispatch.</div></div>
+        </div>
+        <div style="display:flex;gap:20px;padding-left:24px;position:relative;">
+          <div style="position:absolute;left:-8px;top:0;width:16px;height:16px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;color:black;font-family:'Syncopate',sans-serif;">4</div>
+          <div><div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--white);margin-bottom:6px;">Delivery on Arrival</div><div style="font-size:12px;color:rgba(200,200,200,0.5);line-height:1.7;">Pay the <strong style="color:var(--gold)">$1,300 delivery fee</strong> when your vehicle arrives. Not in advance.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Price Table -->
+  <div style="max-width:820px;margin:60px auto 0;background:var(--deep);border:1px solid rgba(255,255,255,0.06);">
+    <div style="padding:18px 32px;border-bottom:1px solid rgba(255,255,255,0.05);font-family:'Syncopate',sans-serif;font-size:9px;letter-spacing:0.4em;color:rgba(200,200,200,0.3);display:grid;grid-template-columns:1fr auto;gap:20px;"><span>MODEL</span><span style="text-align:right;">PRICE (USD → BTC)</span></div>
+    <div style="padding:18px 32px;border-bottom:1px solid rgba(255,255,255,0.04);display:grid;grid-template-columns:1fr auto;gap:20px;background:rgba(184,150,78,0.05);">
+      <span style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);">VIP Prestige Card <span style="font-size:11px;color:var(--red);font-family:'Syncopate',sans-serif;letter-spacing:0.1em;margin-left:8px;">REQUIRED FIRST</span></span>
+      <span style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold);text-align:right;">$2,500</span>
+    </div>
+    <div style="padding:16px 32px;border-bottom:1px solid rgba(255,255,255,0.04);display:grid;grid-template-columns:1fr auto;gap:20px;">
+      <span style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--white);">Tesla Model 3</span>
+      <span style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--white);text-align:right;">$29,500</span>
+    </div>
+    <div style="padding:16px 32px;border-bottom:1px solid rgba(255,255,255,0.04);display:grid;grid-template-columns:1fr auto;gap:20px;">
+      <span style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--white);">Tesla Model Y</span>
+      <span style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--white);text-align:right;">$41,000</span>
+    </div>
+    <div style="padding:16px 32px;border-bottom:1px solid rgba(255,255,255,0.04);display:grid;grid-template-columns:1fr auto;gap:20px;">
+      <span style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--white);">Tesla Model S</span>
+      <span style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--white);text-align:right;">$75,450</span>
+    </div>
+    <div style="padding:16px 32px;border-bottom:1px solid rgba(255,255,255,0.04);display:grid;grid-template-columns:1fr auto;gap:20px;">
+      <span style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--white);">Tesla Model X</span>
+      <span style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--white);text-align:right;">$87,340</span>
+    </div>
+    <div style="padding:16px 32px;border-bottom:1px solid rgba(255,255,255,0.04);display:grid;grid-template-columns:1fr auto;gap:20px;">
+      <span style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--white);">Cybertruck</span>
+      <span style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--white);text-align:right;">$58,700</span>
+    </div>
+    <div style="padding:16px 32px;display:grid;grid-template-columns:1fr auto;gap:20px;background:rgba(184,150,78,0.04);">
+      <span style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);">Delivery Fee <span style="font-size:12px;color:rgba(200,200,200,0.35);font-family:'Jost',sans-serif;font-weight:300;">(paid on arrival)</span></span>
+      <span style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--gold);text-align:right;">$1,300</span>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="contact" class="cta-section">
+  <span class="section-tag">Begin Your Journey</span>
+  <h2 class="section-title">Ready to Enter<br>the <em>Inner Circle?</em></h2>
+  <div class="section-divider"></div>
+  <p class="cta-sub">Start with your VIP Prestige Card, then choose your Tesla. Everything begins with a single Bitcoin transaction.</p>
+  <div class="cta-buttons">
+    <a href="#payment" class="btn-large">Pay with Bitcoin</a>
+    <a href="#offerings" class="btn-large-ghost">View All Models</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">TESLA<span>·</span>PRESTIGE</div>
+  <div class="footer-links">
+    <a href="#offerings">Vehicles</a>
+    <a href="#vip">VIP Card</a>
+    <a href="#invest">Invest</a>
+    <a href="#events">Events</a>
+    <a href="#payment">Payment</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 Tesla Prestige. All rights reserved.</div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animCursor() {
+    cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%,-50%) scale(2.5)'; ring.style.width = '60px'; ring.style.height = '60px'; });
+    el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.width = '36px'; ring.style.height = '36px'; });
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity = 1; e.target.style.transform = 'translateY(0)'; } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.offering, .vip-perk, .invest-tier, .meetgreet-event, .stat').forEach(el => {
+    el.style.opacity = 0; el.style.tran
